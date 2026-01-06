@@ -68,7 +68,7 @@ timer = 20
 
 # Sets up bullet_list
 bullet_list = []
-bullet_countdown = 0
+bullet_countdown = 0  
 
 def draw():
 
@@ -106,18 +106,18 @@ def key_presses():
     if keyboard[keys.ESCAPE]:
         sys.exit()
 
-        # creates bullet if space bar is pressed
+    # creates bullet if space bar is pressed and recoil time has elapsed
     if bullet_countdown == 0:
         if keyboard[keys.SPACE]:
 
             bullet = Actor('laser_sprite.png', anchor=("center", "middle"))
             bullet.scale = 0.05
             bullet.angle = 90
-            bullet.x = player.x
-            bullet.y = player.y
-            bullet.velocityY = 1
+            bullet.x = player.x         # bullet spawn X 
+            bullet.y = player.y + 20    # bullet spawn Y
+            bullet.velocityY = 1        # bullet movement speed
             bullet_list.append(bullet)
-            bullet_countdown = 30
+            bullet_countdown = 30       # recoil time of bullet 
     else:
         bullet_countdown -= 1
 
@@ -128,6 +128,7 @@ def enemy_movement():
     for enemy in enemy_list:
         enemy.x += enemy.velocityX
 
+        # limits of enemy horizontal movement
         if enemy.left < 100: 
             enemy.velocityX *= -1
             enemy.left = 100
@@ -150,6 +151,7 @@ def bullet_movement():
             bullets_to_remove.append(bullet)
 
         for enemy in enemy_list:
+            # if a bullet hits an enemy 
             if bullet.colliderect(enemy):
                 # Reset enemy position
                 enemy.y = 100
@@ -167,12 +169,15 @@ def bullet_movement():
 def update():
     global game_running, score, bullet_countdown, timer
 
+    # allow key presses at all times
     key_presses()
 
+    # while game is running, enemies move and bullets move
     if game_running == True:
         enemy_movement()
         bullet_movement()
 
+    # while the timer is above 0, decrease it
     if timer > 0:
         timer -= 1 / 60  # Decrease by 1/60th of a second (since update runs 60 times per second)
 
