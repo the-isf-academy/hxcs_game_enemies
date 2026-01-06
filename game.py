@@ -2,8 +2,11 @@
 #
 # 👾 This game has a shooting mechanic and moving enemies 👾
 #
-# 📄 How to run the file
-#     🎮▶️ Click the Play button
+# 1️⃣ Run the file & install
+#    - in the Terminal run the commands: 
+#.          python3 -m venv my_project_env
+#           source my_project_env/bin/activate
+#           pip3 install pgzero
 #
 # 💻  You need to fix the following
 #  - enemies should move the full width of the screen
@@ -50,7 +53,7 @@ for i in range(2):
     enemy = Actor("alien.png")
     enemy.scale = 1
     enemy.y = 100
-    enemy.x = random.randint(0, 200)
+    enemy.x = random.randint(100, 300)
     enemy.velocityX = 1
     enemy_list.append(enemy)
 
@@ -61,7 +64,7 @@ game_running = True
 score = 0
 
 # Setup timer
-timer = 5
+timer = 20
 
 # Sets up bullet_list
 bullet_list = []
@@ -125,8 +128,12 @@ def enemy_movement():
     for enemy in enemy_list:
         enemy.x += enemy.velocityX
 
-        if enemy.left < 0 or enemy.right > 200:
+        if enemy.left < 100: 
             enemy.velocityX *= -1
+            enemy.left = 100
+        elif enemy.right > 300:
+            enemy.velocityX *= -1
+            enemy.right = 300
 
 
 def bullet_movement():
@@ -151,6 +158,8 @@ def bullet_movement():
                 # Mark the bullet for removal
                 bullets_to_remove.append(bullet)
 
+                break
+
     # Remove bullets after iteration
     for bullet in bullets_to_remove:
         bullet_list.remove(bullet)
@@ -165,6 +174,6 @@ def update():
         bullet_movement()
 
     if timer > 0:
-            timer -= 1 / 60  # Decrease by 1/60th of a second (since update runs 60 times per second)
+        timer -= 1 / 60  # Decrease by 1/60th of a second (since update runs 60 times per second)
 
 pgzrun.go()
